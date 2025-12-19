@@ -25,10 +25,14 @@ def test_vscode_version(mock_config):
 
 def test_kiro_version(mock_config):
     updater = KiroUpdater(mock_config)
-    with patch('requests.get') as mock_get:
+    with patch('requests.get') as mock_get, patch('requests.head') as mock_head:
+        # Mock the downloads page response
         mock_get.return_value.status_code = 200
-        mock_get.return_value.json.return_value = {"version": "1.23.0"}
-        assert updater.get_latest_version() == "1.23.0"
+        mock_get.return_value.text = 'kiro-ide-0.8.0-stable-linux-x64.AppImage'
+        # Mock HEAD request for version verification
+        mock_head.return_value.status_code = 200
+        version = updater.get_latest_version()
+        assert version.startswith("0.")  # Should be IDE version, not CLI
 
 def test_cursor_updater_name(mock_config):
     updater = CursorUpdater(mock_config)
