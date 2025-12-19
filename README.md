@@ -79,6 +79,17 @@ The tool stores configuration in `~/.config/ide-updater/config.json`:
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## Support the Project
+
+If this tool saves you time and makes your development workflow easier, consider supporting its development:
+
+- ☕ **Buy me a coffee**: [Ko-fi](https://ko-fi.com/cosmah)
+- 💖 **GitHub Sponsors**: [Sponsor on GitHub](https://github.com/sponsors/cosmah)
+- 🪙 **Crypto**: Bitcoin: `your-btc-address-here`
+- 💳 **PayPal**: [paypal.me/cosmah](https://paypal.me/cosmah)
+
+Your support helps maintain and improve this tool for the entire Linux developer community!
+
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
