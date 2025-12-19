@@ -103,3 +103,5 @@ Track these to measure success:
 **Your tool is production-ready!** 🎉
 
 The Kiro version bug is fixed, the package builds cleanly, and you have all the infrastructure for professional distribution. Time to share it with the world!
+
+python3 -m buildpython3 -m build

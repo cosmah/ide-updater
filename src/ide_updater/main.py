@@ -21,6 +21,21 @@ def callback():
     """
     IDE Updater - Keep your development environment fresh.
     """
+    # Check if we're in PATH (helpful for first-time users)
+    import os
+    import shutil
+    local_bin = Path.home() / ".local" / "bin"
+    if local_bin.exists() and str(local_bin) not in os.environ.get("PATH", ""):
+        # Only show this once, not every time
+        path_warning_shown = os.environ.get("IDE_UPDATER_PATH_WARNING_SHOWN", "0")
+        if path_warning_shown != "1":
+            console.print(
+                "[yellow]⚠️  Note:[/yellow] If you just installed with pipx and see this message, "
+                "your PATH may not be set up yet.\n"
+                "Run: [bold]pipx ensurepath[/bold] then restart your terminal.\n"
+                "Or run: [bold]source ~/.bashrc[/bold]\n"
+            )
+            os.environ["IDE_UPDATER_PATH_WARNING_SHOWN"] = "1"
     pass
 
 @app.command()

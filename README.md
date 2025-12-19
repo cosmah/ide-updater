@@ -15,19 +15,27 @@ Keep your development environment fresh with automatic IDE updates!
 
 ## Installation
 
-### One-Command Install (Recommended)
+### Quick Install with pipx (Recommended)
 
+**If you have pipx installed:**
 ```bash
-python3 -m pip install --user pipx && python3 -m pipx ensurepath && pipx install ide-updater
+pipx install ide-updater && pipx ensurepath
 ```
 
-**Note:** After installation, restart your terminal or run `source ~/.bashrc` to use the `ide-updater` command.
-
-### Alternative: Using pipx (if already installed)
-
+**If you don't have pipx yet (complete one-command install):**
 ```bash
-pipx install ide-updater
+python3 -m pip install --user pipx && python3 -m pipx ensurepath && pipx install ide-updater && pipx ensurepath
 ```
+
+**After installation:** Restart your terminal or run `source ~/.bashrc` to make the command available immediately.
+
+### Why pipx?
+
+`pipx` is the recommended way to install Python CLI applications. It:
+- ✅ Installs apps in isolated environments (no conflicts)
+- ✅ Makes commands globally available
+- ✅ Works on modern Linux systems (avoids "externally-managed-environment" errors)
+- ✅ Easy to update: `pipx upgrade ide-updater`
 
 ### Alternative: Using pip in a virtual environment
 
