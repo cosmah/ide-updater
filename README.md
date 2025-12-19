@@ -15,12 +15,28 @@ Keep your development environment fresh with automatic IDE updates!
 
 ## Installation
 
-### From PyPI (Recommended)
+### One-Command Install (Recommended)
+
 ```bash
-pip install ide-updater
+python3 -m pip install --user pipx && python3 -m pipx ensurepath && pipx install ide-updater
+```
+
+**Note:** After installation, restart your terminal or run `source ~/.bashrc` to use the `ide-updater` command.
+
+### Alternative: Using pipx (if already installed)
+
+```bash
+pipx install ide-updater
+```
+
+### Alternative: Using pip in a virtual environment
+
+```bash
+python3 -m venv venv && source venv/bin/activate && pip install ide-updater
 ```
 
 ### From Source
+
 ```bash
 git clone https://github.com/cosmah/ide-updater.git
 cd ide-updater
@@ -82,11 +98,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## Support the Project
 
 If this tool saves you time and makes your development workflow easier, consider supporting its development:
-
-- ☕ **Buy me a coffee**: [Ko-fi](https://ko-fi.com/cosmah)
-- 💖 **GitHub Sponsors**: [Sponsor on GitHub](https://github.com/sponsors/cosmah)
-- 🪙 **Crypto**: Bitcoin: `your-btc-address-here`
-- 💳 **PayPal**: [paypal.me/cosmah](https://paypal.me/cosmah)
 
 Your support helps maintain and improve this tool for the entire Linux developer community!
 

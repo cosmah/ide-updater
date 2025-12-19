@@ -57,3 +57,5 @@ test_*.py
 # Distribution
 *.tar.gz
 *.whl
+# PyPI credentials (contains API tokens)
+.pypirc
