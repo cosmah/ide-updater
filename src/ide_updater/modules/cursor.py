@@ -129,3 +129,27 @@ class CursorUpdater(BaseUpdater):
             pass
         
         return "not installed"
+    
+    def find_existing_installation(self):
+        """
+        Find where Cursor is currently installed.
+        Checks PATH first, then the configured install_dir.
+        Returns the Path to the AppImage file.
+        """
+        from pathlib import Path
+        import shutil
+        
+        # First, try to find 'cursor' in PATH
+        cursor_path = shutil.which("cursor")
+        if cursor_path:
+            cursor_path = Path(cursor_path).resolve()
+            # If it's a symlink to an AppImage, return the AppImage location
+            if cursor_path.exists():
+                return cursor_path
+        
+        # Check configured install_dir for AppImage
+        appimage = self.install_dir / "Cursor.AppImage"
+        if appimage.exists():
+            return appimage
+        
+        return None

@@ -52,6 +52,36 @@ class VSCodeUpdater(BaseUpdater):
             pass
         
         return "not installed"
+    
+    def find_existing_installation(self):
+        """
+        Find where VS Code is currently installed.
+        Checks PATH first, then the configured install_dir.
+        Returns the Path to the VS Code installation directory.
+        """
+        from pathlib import Path
+        import shutil
+        
+        # First, try to find 'code' in PATH
+        code_path = shutil.which("code")
+        if code_path:
+            code_path = Path(code_path).resolve()
+            # If it's in a bin/ directory, get the parent (installation root)
+            if code_path.parent.name == "bin":
+                return code_path.parent.parent
+            return code_path.parent
+        
+        # Check configured install_dir
+        vscode_dir = self.install_dir / "VSCode" / "bin" / "code"
+        if vscode_dir.exists():
+            return self.install_dir / "VSCode"
+        
+        # Also check for VisualStudioCode variant
+        vscode_dir = self.install_dir / "VisualStudioCode" / "bin" / "code"
+        if vscode_dir.exists():
+            return self.install_dir / "VisualStudioCode"
+        
+        return None
 
     def get_download_url(self) -> str:
         # We can either return the static link or the one from the JSON

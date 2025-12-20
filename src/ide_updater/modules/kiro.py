@@ -10,7 +10,19 @@ class KiroUpdater(BaseUpdater):
         """
         Get the latest Kiro IDE version (not CLI).
         The IDE uses a different versioning scheme (0.x.x) than the CLI (1.x.x).
+        
+        NOTE: Kiro downloads are currently unavailable due to access restrictions.
+        The download URLs have changed or are behind authentication.
+        This module is disabled until the download access is restored.
         """
+        from rich.console import Console
+        console = Console()
+        console.print("[yellow]⚠ Kiro support is temporarily disabled[/yellow]")
+        console.print("[dim]The download URLs are currently inaccessible (403 Forbidden)[/dim]")
+        console.print("[dim]Please visit https://kiro.dev/downloads/ to download manually[/dim]")
+        return "unavailable"
+        
+        # Disabled: Current implementation no longer works
         headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
         import re
         from packaging.version import parse as parse_version
@@ -81,38 +93,11 @@ class KiroUpdater(BaseUpdater):
     def get_download_url(self) -> str:
         """
         Get the download URL for the latest Kiro IDE (not CLI).
-        Constructs URL based on the IDE version.
+        
+        NOTE: Kiro downloads are currently unavailable. 
+        The download URLs have changed or are behind authentication.
+        Users should visit https://kiro.dev/downloads/ to download manually.
         """
-        # First get the IDE version
-        version = self.get_latest_version()
-        
-        if version != "unknown":
-            base_url = "https://desktop-release.q.us-east-1.amazonaws.com"
-            # IDE download pattern: {version}/kiro-ide-{version}-stable-linux-x64.tar.gz
-            # Or AppImage: {version}/kiro-ide-{version}-stable-linux-x64.AppImage
-            # Try AppImage first (preferred for Linux)
-            appimage_url = f"{base_url}/{version}/kiro-ide-{version}-stable-linux-x64.AppImage"
-            # Verify it exists by checking HEAD request
-            try:
-                resp = requests.head(appimage_url, timeout=5, allow_redirects=True)
-                if resp.status_code == 200:
-                    return appimage_url
-            except:
-                pass
-            
-            # Fallback to tar.gz
-            tar_gz_url = f"{base_url}/{version}/kiro-ide-{version}-stable-linux-x64.tar.gz"
-            try:
-                resp = requests.head(tar_gz_url, timeout=5, allow_redirects=True)
-                if resp.status_code == 200:
-                    return tar_gz_url
-            except:
-                pass
-            
-            # If version check worked but URLs don't, return constructed URL anyway
-            return appimage_url
-        
-        # Ultimate fallback
         return "https://kiro.dev/downloads/"
 
     def get_current_version(self) -> str:

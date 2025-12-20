@@ -88,20 +88,42 @@ def _update_ide(updater, config):
         console.print("[green]Download complete.[/green]")
         console.print("[bold blue]Installing...[/bold blue]")
         
+        # Check if IDE already exists and determine install location
+        existing_installation = updater.find_existing_installation()
+        if existing_installation:
+            console.print(f"[yellow]Found existing installation at: {existing_installation}[/yellow]")
+            install_location = existing_installation
+        else:
+            console.print(f"[blue]No existing installation found. Installing to default location.[/blue]")
+            install_location = None
+        
         install_dir = Path(config["install_dir"])
         
         # Installation logic
         if str(dest_path).endswith(".AppImage"):
             dest_path.chmod(0o755)
-            # Create a clean name e.g. Cursor.AppImage
-            clean_name = f"{updater.name.replace(' ', '')}.AppImage"
-            target_path = install_dir / clean_name
+            
+            # Determine target path
+            if install_location and install_location.suffix == ".AppImage":
+                # Replace existing AppImage in place
+                target_path = install_location
+                console.print(f"[yellow]Replacing existing AppImage...[/yellow]")
+            else:
+                # Create new installation in default location
+                clean_name = f"{updater.name.replace(' ', '')}.AppImage"
+                target_path = install_dir / clean_name
+            
+            # Backup old file if it exists
+            if target_path.exists():
+                backup_path = target_path.with_suffix(".AppImage.backup")
+                shutil.move(str(target_path), str(backup_path))
+                console.print(f"[dim]Backed up old version to: {backup_path}[/dim]")
+            
             shutil.move(str(dest_path), str(target_path))
-            console.print(f"[green]Installed to {target_path}[/green]")
+            console.print(f"[green]✓ Installed to {target_path}[/green]")
             
         elif str(dest_path).endswith(".tar.gz"):
             # For VS Code, we want a clean directory.
-            # e.g. ~/Applications/VSCode-linux-x64 -> ~/Applications/VSCode
             
             # 1. Extract to temp dir first to inspect structure
             extract_temp = Path(config["temp_dir"]) / "extracted"
@@ -119,16 +141,26 @@ def _update_ide(updater, config):
             else:
                 source_folder = extract_temp
 
-            # 3. Move to install_dir
-            # e.g. VSCode
-            final_folder_name = updater.name.replace(" ", "")
-            final_path = install_dir / final_folder_name
+            # 3. Determine target directory
+            if install_location and install_location.is_dir():
+                # Replace existing directory in place
+                final_path = install_location
+                console.print(f"[yellow]Replacing existing installation...[/yellow]")
+            else:
+                # Create new installation in default location
+                final_folder_name = updater.name.replace(" ", "")
+                final_path = install_dir / final_folder_name
             
+            # Backup old directory if it exists
             if final_path.exists():
-                shutil.rmtree(final_path)
+                backup_path = final_path.with_suffix(".backup")
+                if backup_path.exists():
+                    shutil.rmtree(backup_path)
+                shutil.move(str(final_path), str(backup_path))
+                console.print(f"[dim]Backed up old version to: {backup_path}[/dim]")
             
             shutil.move(str(source_folder), str(final_path))
-            console.print(f"[green]Installed to {final_path}[/green]")
+            console.print(f"[green]✓ Installed to {final_path}[/green]")
             
         else:
             console.print(f"[yellow]Unknown file type for {dest_path}. Saved at {dest_path}[/yellow]")

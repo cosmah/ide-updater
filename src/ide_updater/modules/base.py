@@ -38,6 +38,14 @@ class BaseUpdater(ABC):
         # Default implementation could assume a standard location
         # But IDEs vary wildly.
         return None
+    
+    def find_existing_installation(self) -> Optional[Path]:
+        """
+        Find where the IDE is currently installed.
+        Returns the path to the existing installation or None if not found.
+        Subclasses should override this to implement IDE-specific detection.
+        """
+        return None
 
     def download(self, url: str, dest: Path) -> Path:
         """Download file to destination with progress bar."""

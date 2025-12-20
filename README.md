@@ -1,15 +1,16 @@
 # IDE Updater
 
-A CLI tool to quickly update Linux IDEs (VS Code, Cursor, Kiro) with a simple command.
+A CLI tool to quickly update Linux IDEs (VS Code and Cursor) with a simple command.
 
 Keep your development environment fresh with automatic IDE updates!
 
 ## Features
 
-- 🚀 **Multi-IDE Support**: VS Code, Cursor, and Kiro IDE
+- 🚀 **Multi-IDE Support**: VS Code and Cursor IDE
 - 🔍 **Smart Version Detection**: Checks both system-wide and local installations
 - 📦 **Automatic Downloads**: Fetches latest versions from official sources
 - 🎯 **Clean Installation**: Manages AppImages and tar.gz files properly
+- 🔄 **Smart Updates**: Automatically updates IDEs in their current location
 - ⚙️ **Configurable**: Stores settings in `~/.config/ide-updater/`
 - 🎨 **Beautiful Output**: Rich terminal interface with progress bars
 
@@ -63,7 +64,6 @@ ide-updater update
 # Update specific IDE
 ide-updater update cursor
 ide-updater update vscode
-ide-updater update kiro
 
 # Initialize configuration
 ide-updater init
@@ -80,18 +80,29 @@ The tool stores configuration in `~/.config/ide-updater/config.json`:
     "ides": {
         "vscode": {"enabled": true, "channel": "stable"},
         "cursor": {"enabled": true},
-        "kiro": {"enabled": true}
+        "kiro": {"enabled": false}
     }
 }
 ```
 
+> **Note:** Kiro support is temporarily disabled due to download access restrictions. The download URLs have changed or require authentication.
+
+### Installation Behavior
+
+**Smart Update Location:**
+- If an IDE is already installed (detected in PATH or known locations), the updater will **replace it in the same location**
+- If no existing installation is found, it installs to the configured `install_dir` (default: `~/Applications/`)
+- Old versions are automatically backed up with a `.backup` extension before replacement
+
+This ensures your system configurations (desktop entries, PATH, etc.) continue working after updates!
+
 ## Supported IDEs
 
-| IDE | Version Detection | Download Source | Installation |
-|-----|------------------|-----------------|--------------|
-| **VS Code** | Microsoft Update API | Official Microsoft | tar.gz extraction |
-| **Cursor** | Changelog scraping | cursor.com API | AppImage |
-| **Kiro** | Downloads page + AWS | AWS S3 bucket | AppImage/tar.gz |
+| IDE | Version Detection | Download Source | Installation | Status |
+|-----|------------------|-----------------|--------------|--------|
+| **VS Code** | Microsoft Update API | Official Microsoft | tar.gz extraction | ✅ Active |
+| **Cursor** | Changelog scraping | cursor.com API | AppImage | ✅ Active |
+| **Kiro** | Downloads page + AWS | AWS S3 bucket | AppImage/tar.gz | ⚠️ Disabled (Access restricted) |
 
 ## Requirements
 
